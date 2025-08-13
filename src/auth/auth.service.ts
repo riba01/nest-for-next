@@ -7,6 +7,7 @@ export class AuthService {
     /* console.log(loginDto); */
     /* return 'Olá do AuthService'; */
     console.log(loginDto.email, loginDto.password);
+    console.log(loginDto instanceof LoginDto, loginDto);
     return loginDto;
   }
 }
