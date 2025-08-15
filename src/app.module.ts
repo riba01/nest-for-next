@@ -15,12 +15,6 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    /*  TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: './db.sqlite',
-      synchronize: true,
-      autoLoadEntities: true,
-    }), */
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         if (process.env.DB_TYPE === 'better-sqlite3') {
@@ -29,6 +23,7 @@ import { UserModule } from './user/user.module';
             database: process.env.DB_DATABASE || './db.sqlite',
             synchronize: process.env.DB_SYNCHRONIZE === '1',
             autoLoadEntities: process.env.DB_AUTOLOAD_ENTITIES === '1',
+            logging: ['error', 'schema'],
           };
         }
         return {
@@ -40,6 +35,7 @@ import { UserModule } from './user/user.module';
           database: process.env.DB_DATABASE,
           synchronize: process.env.DB_SYNCHRONIZE === '1',
           autoLoadEntities: process.env.DB_AUTOLOAD_ENTITIES === '1',
+          logging: ['error', 'schema'],
         };
       },
     }),
