@@ -1,8 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HashService } from '../common/hash/hash.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -39,5 +44,26 @@ export class UserService {
 
   findByEmail(email: string) {
     return this.userRepository.findOneBy({ email });
+  }
+
+  findById(id: string) {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  save(user: User) {
+    return this.userRepository.save(user);
+  }
+  async update(id: string, dto: UpdateUserDto) {
+    if (!dto.name && !dto.email) {
+      throw new BadRequestException('Dados não enviados');
+    }
+    const userExist = await this.userRepository.existsBy({
+      email: dto.email,
+    });
+
+    if (userExist) {
+      throw new ConflictException('E-mail já cadastrado');
+    }
+    return this.userRepository.update(id, dto);
   }
 }

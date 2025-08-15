@@ -1,4 +1,6 @@
 @baseUrl = http://localhost:3000
+//@token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NTkyNTVhMC05MzFkLTQ2YjYtOTYzYy1iNjNhNDZmOGE5NDgiLCJlbWFpbCI6ImFybWFuZG9AZ21haWwuY29tIiwiaWF0IjoxNzU1Mjc5MDY3LCJleHAiOjE3NTUzNjU0Njd9.9x39DMr9WgAgeTIa2tnztSdHyhgflhyhNjp8DRPcbu8'
+@token= {{authLogin.response.body.accessToken}}
 ###
 # @name authLogin
 POST {{baseUrl}}/auth/login
@@ -6,7 +8,7 @@ Content-Type: application/json
 
 {
   "email": "armando@gmail.com",
-  "password": "123456",
+  "password": "123456"
 //  "Malware": "Script"
 //  "teste":"123"
 }
@@ -14,6 +16,7 @@ Content-Type: application/json
 ###
 # @name readOneUser
 GET {{baseUrl}}/user/123
+Authorization: Bearer {{token}}
 
 ### Create user
 # @name createUser
@@ -24,4 +27,14 @@ Content-Type: application/json
   "name": "Armando Ribamar",
   "email": "armando@gmail.com",
   "password": "123456"
+}
+
+### Update user
+# @name updateUser
+PATCH {{baseUrl}}/user/me
+Content-Type: application/json
+
+{
+  "name": "Armando Ribamar",
+  "email": "armando@gmail.com",
 }
