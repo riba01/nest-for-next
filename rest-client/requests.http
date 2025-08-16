@@ -8,15 +8,10 @@ Content-Type: application/json
 
 {
   "email": "armando@gmail.com",
-  "password": "123456"
+  "password": "Aa123456#"
 //  "Malware": "Script"
 //  "teste":"123"
 }
-
-###
-# @name readOneUser
-GET {{baseUrl}}/user/123
-Authorization: Bearer {{token}}
 
 ### Create user
 # @name createUser
@@ -25,8 +20,8 @@ Content-Type: application/json
 
 {
   "name": "Teste Ribamar",
-  "email": "armand23@gmail.com",
-  "password": "123456"
+  "email": "teste@gmail.com",
+  "password": "Aa123456#"
 }
 
 ### Update user
@@ -47,6 +42,20 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "currentPassword": "123456",
-  "newPassword": "1234567"
+  "currentPassword": "Aa123456#",
+  "newPassword": "Aa123456#"
 }
+
+### Read one User
+# @name readOneUser
+GET {{baseUrl}}/user/me
+Authorization: Bearer {{token}}
+
+###
+
+### Delete one User
+# @name deleteOneUser
+DELETE {{baseUrl}}/user/me
+Authorization: Bearer {{token}}
+
+###
