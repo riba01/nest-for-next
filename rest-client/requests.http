@@ -39,3 +39,14 @@ Authorization: Bearer {{token}}
   "name": "Armando Ribamar",
   "email": "armando@gmail.com"
 }
+
+### Update user password
+# @name updateUserPassword
+PATCH {{baseUrl}}/user/me/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "currentPassword": "123456",
+  "newPassword": "1234567"
+}
