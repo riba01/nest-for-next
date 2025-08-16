@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,16 +21,7 @@ export class UserService {
 
   async create(dto: CreateUserDto) {
     //Email precisa ser único
-    const userExist = await this.userRepository.exists({
-      where: {
-        email: dto.email,
-      },
-    });
-
-    if (userExist) {
-      throw new ConflictException('E-mail já cadastrado');
-    }
-
+    await this.failIfExistByEmail(dto.email);
     //Precsa fazer hash de senha
     const hashedPassword = await this.hashService.hash(dto.password);
     const newUser: CreateUserDto = {
@@ -53,17 +45,38 @@ export class UserService {
   save(user: User) {
     return this.userRepository.save(user);
   }
+
+  async findOneByOrFail(userData: Partial<User>) {
+    const user = await this.userRepository.findOneBy(userData);
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    return user;
+  }
+  async failIfExistByEmail(email: string) {
+    const exits = await this.userRepository.findOneBy({ email });
+    if (exits) {
+      throw new ConflictException('E-mail já cadastrado');
+    }
+  }
+
   async update(id: string, dto: UpdateUserDto) {
     if (!dto.name && !dto.email) {
       throw new BadRequestException('Dados não enviados');
     }
-    const userExist = await this.userRepository.existsBy({
-      email: dto.email,
-    });
+    const userExist = await this.findOneByOrFail({ id });
 
-    if (userExist) {
-      throw new ConflictException('E-mail já cadastrado');
+    userExist.name = dto.name ?? userExist.name;
+
+    if (dto.email && userExist.email !== dto.email) {
+      //o usuário quer trocar o email
+      //checar se o email não existe na BD
+
+      await this.failIfExistByEmail(dto.email);
+      userExist.email = dto.email;
+      userExist.forceLogout = true;
+      /* console.log(userExist); */
     }
-    return this.userRepository.update(id, dto);
+    return this.save(userExist);
   }
 }
