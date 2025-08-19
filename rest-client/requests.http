@@ -31,8 +31,8 @@ POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
-  "name": "",
-  "email": "teste@gmail.com",
+  "name": "Armando Ribamar",
+  "email": "armando@gmail.com",
   "password": "Aa123456#"
 }
 
@@ -126,11 +126,15 @@ POST {{baseUrl}}/upload
 Authorization: Bearer {{token}}
 Content-Type: multipart/form-data; boundary=----BryenFormBoundary
 
-----BryenFormBoundary
-Content-Disposition: form-date; name='file'. filename="example.png"
+------BryenFormBoundary
+Content-Disposition: form-data; name="file"; filename="image.png"
 Content-Type: image/png
-../dev/images/example.png
-----BryenFormBoundary--
 
+< ../dev/images/image.png
+------BryenFormBoundary--
 
+### Read Image
+# @name readImage
+GET {{imageUrl}}
 
+###############################################################################
