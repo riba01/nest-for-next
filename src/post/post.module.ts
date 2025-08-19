@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
-import { PostService } from './post.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from '../common/common.module';
+import { Post } from './entities/post.entity';
 import { PostController } from './post.controller';
+import { PostService } from './post.service';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Post]), CommonModule], // <- obrigatório p/ autoLoadEntities
   controllers: [PostController],
   providers: [PostService],
+  exports: [TypeOrmModule, PostService],
 })
 export class PostModule {}

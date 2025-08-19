@@ -1,14 +1,26 @@
 @baseUrl = http://localhost:3000
 //@token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NTkyNTVhMC05MzFkLTQ2YjYtOTYzYy1iNjNhNDZmOGE5NDgiLCJlbWFpbCI6ImFybWFuZG9AZ21haWwuY29tIiwiaWF0IjoxNzU1Mjc5MDY3LCJleHAiOjE3NTUzNjU0Njd9.9x39DMr9WgAgeTIa2tnztSdHyhgflhyhNjp8DRPcbu8'
 @token= {{authLogin.response.body.accessToken}}
+
+@postUuid = {{createPostOwned.response.body.id}}
+@postSlug = {{createPostOwned.response.body.slug}}
+@imagePath = {{uploadImage.response.body.url}}
+@imageUrl = {{baseUrl}}/{{imagePath}}
+
+@userNameForTesting = Armando
+@userEmailForTesting = armando@gmail.com
+@userPasswordForTesting = Aa123456#
+@userNewPasswordForTesting = Aa123456#
+
+
 ###
 # @name authLogin
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "armando@gmail.com",
-  "password": "Aa123456#"
+  "email": "{{userEmailForTesting}}",
+  "password": "{{userPasswordForTesting}}"
 //  "Malware": "Script"
 //  "teste":"123"
 }
@@ -19,7 +31,7 @@ POST {{baseUrl}}/user
 Content-Type: application/json
 
 {
-  "name": "Teste Ribamar",
+  "name": "",
   "email": "teste@gmail.com",
   "password": "Aa123456#"
 }
@@ -32,7 +44,7 @@ Authorization: Bearer {{token}}
 
 {
   "name": "Armando Ribamar",
-  "email": "armando@gmail.com"
+  "email": "{{userEmailForTesting}}"
 }
 
 ### Update user password
@@ -42,8 +54,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "currentPassword": "Aa123456#",
-  "newPassword": "Aa123456#"
+  "currentPassword": "{{userPasswordForTesting}}",
+  "newPassword": "{{userNewPasswordForTesting}}"
 }
 
 ### Read one User
@@ -58,4 +70,67 @@ Authorization: Bearer {{token}}
 DELETE {{baseUrl}}/user/me
 Authorization: Bearer {{token}}
 
-###
+### Create Post
+# @name createPostOwned
+POST {{baseUrl}}/post/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Novo Titulo do Post",
+  "content": "Conteudo do Post alongado",
+  "excerpt": "Excerto do Post",
+  "coverImageUrl": "{{imageUrl}}"
+}
+
+### Read one Post
+# @name readOnePostPublic
+GET {{baseUrl}}/post/{{postSlug}}
+
+##### Read one Post
+# @name readOnePostOwned
+GET {{baseUrl}}/post/me/{{postUuid}}
+Authorization: Bearer {{token}}
+
+### Update Post
+# @name updatePostOwned
+PATCH {{baseUrl}}/post/me/{{postUuid}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "NOVO - Titulo do Post",
+  "content": "NOVO - Conteudo do Post",
+  "excerpt": "NOVO - Conteudo",
+  "published": true
+}
+
+### Delete Post
+# @name deletePostOwned
+DELETE {{baseUrl}}/post/me/{{postUuid}}
+Authorization: Bearer {{token}}
+
+
+### Read All post owned
+# @name readAllPostOwned
+GET {{baseUrl}}/post/me
+Authorization: Bearer {{token}}
+
+### Read All post public
+# @name readAllPostPublic
+GET {{baseUrl}}/post
+
+### Upload Image
+# @name uploadImage
+POST {{baseUrl}}/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----BryenFormBoundary
+
+----BryenFormBoundary
+Content-Disposition: form-date; name='file'. filename="example.png"
+Content-Type: image/png
+../dev/images/example.png
+----BryenFormBoundary--
+
+
+

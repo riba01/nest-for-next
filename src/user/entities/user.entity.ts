@@ -29,4 +29,6 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  //One User to Many Post
 }

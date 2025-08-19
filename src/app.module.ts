@@ -19,11 +19,10 @@ import { UserModule } from './user/user.module';
       useFactory: () => {
         if (process.env.DB_TYPE === 'better-sqlite3') {
           return {
-            type: process.env.DB_TYPE,
+            type: 'better-sqlite3',
             database: process.env.DB_DATABASE || './db.sqlite',
             synchronize: process.env.DB_SYNCHRONIZE === '1',
             autoLoadEntities: process.env.DB_AUTOLOAD_ENTITIES === '1',
-            logging: ['error', 'schema'],
           };
         }
         return {
@@ -35,7 +34,6 @@ import { UserModule } from './user/user.module';
           database: process.env.DB_DATABASE,
           synchronize: process.env.DB_SYNCHRONIZE === '1',
           autoLoadEntities: process.env.DB_AUTOLOAD_ENTITIES === '1',
-          logging: ['error', 'schema'],
         };
       },
     }),
