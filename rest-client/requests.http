@@ -1,11 +1,11 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3001
 //@token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4NTkyNTVhMC05MzFkLTQ2YjYtOTYzYy1iNjNhNDZmOGE5NDgiLCJlbWFpbCI6ImFybWFuZG9AZ21haWwuY29tIiwiaWF0IjoxNzU1Mjc5MDY3LCJleHAiOjE3NTUzNjU0Njd9.9x39DMr9WgAgeTIa2tnztSdHyhgflhyhNjp8DRPcbu8'
 @token= {{authLogin.response.body.accessToken}}
 
 @postUuid = {{createPostOwned.response.body.id}}
 @postSlug = {{createPostOwned.response.body.slug}}
 @imagePath = {{uploadImage.response.body.url}}
-@imageUrl = {{baseUrl}}/{{imagePath}}
+@imageUrl = {{baseUrl}}{{imagePath}}
 
 @userNameForTesting = Armando
 @userEmailForTesting = armando@gmail.com

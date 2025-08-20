@@ -46,6 +46,7 @@ export class UploadService {
     const fileName = `${uniqueSuffix}.${fileExtension}`;
     const filePath = resolve(uploadPath, fileName);
     const url = process.env.URL_UPLOAD;
+
     writeFileSync(filePath, file.buffer);
 
     return {

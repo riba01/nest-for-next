@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filters';
 import { PostModule } from './post/post.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filters';
-import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { APP_FILTER } from '@nestjs/core';
             type: 'better-sqlite3',
             database: process.env.DB_DATABASE || './db.sqlite',
             synchronize: process.env.DB_SYNCHRONIZE === '1',
-            autoLoadEntities: process.env.DB_AUTOLOAD_ENTITIES === '1',
+            autoLoadEntities: true,
           };
         }
         return {
