@@ -5,8 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
-import { UserModule } from './user/user.module';
 import { UploadModule } from './upload/upload.module';
+import { UserModule } from './user/user.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filters';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -41,7 +43,13 @@ import { UploadModule } from './upload/upload.module';
     UploadModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
   exports: [],
 })
 export class AppModule {}
