@@ -4,10 +4,12 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 @Catch() //captura todas as exceções
 export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger(AllExceptionsFilter.name);
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -41,6 +43,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     }
 
+    if (!(exception instanceof HttpException)) {
+      this.logger.error(
+        `Erro interno inesperado`,
+        (exception as Error).stack || 'sem stack',
+      );
+    } else {
+      this.logger.warn(`${status} - ${errorName}: ${messages.join(' | ')}`);
+    }
     // Ensure messages is always an array of strings
     response.status(status).json({
       message: messages,
